@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<psalm errorLevel="1" findUnusedPsalmSuppress="true" forbidEcho="true" resolveFromConfigFile="true" useDocblockPropertyTypes="true">
+  <projectFiles>
+    <directory name="public" />
+    <directory name="src" />
+    <directory name="tests" />
+    <ignoreFiles>
+      <directory name="vendor" />
+    </ignoreFiles>
+  </projectFiles>
+
+  <plugins>
+  </plugins>
+
+  <issueHandlers>
+    <PropertyNotSetInConstructor>
+      <errorLevel type="suppress">
+        <directory name="tests" />
+      </errorLevel>
+    </PropertyNotSetInConstructor>
+  </issueHandlers>
+</psalm>

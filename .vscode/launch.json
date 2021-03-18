@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "name": "Xdebug",
+      "pathMappings": {
+        "/usr/share/nginx": "${workspaceFolder}",
+        "dockerPath": "${workspaceFolder}"
+      },
+      "port": 9003,
+      "request": "launch",
+      "type": "php"
+    }
+  ]
+}

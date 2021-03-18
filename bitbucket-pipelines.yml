@@ -1,0 +1,36 @@
+clone:
+  depth: full
+
+definitions:
+  php-pipeline:
+    - step: &php-pipeline
+        caches:
+          - composer
+          - docker
+        script:
+          - pipe: atlassian/git-secrets-scan:0.4.3
+          - apt-get update --fix-missing
+          - apt-get install -y --no-install-recommends git unzip
+          - pecl install xdebug && docker-php-ext-enable xdebug
+          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+          - composer install --no-interaction --no-plugins --no-progress --no-scripts
+          - composer test
+
+pipelines:
+  default:
+    - parallel:
+        - step:
+            <<: *php-pipeline
+            image: php:8.0
+            name: "php:8.0"
+
+        - step:
+            <<: *php-pipeline
+            image: "php:7.3"
+            name: "php:7.3"
+            trigger: manual
+        - step:
+            <<: *php-pipeline
+            image: php:7.4
+            name: "php:7.4"
+            trigger: manual

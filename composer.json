@@ -1,0 +1,65 @@
+{
+  "name": "%PKGNAME%",
+  "description": "%PKGDESCRIPTION%",
+  "version": "1.0.0",
+  "license": "Unlicense",
+  "authors": [
+    {
+      "name": "DL2 IT Services, Ltd",
+      "homepage": "https://dl2.dev"
+    }
+  ],
+  "require-dev": {
+    "ergebnis/composer-normalize": "^2.13",
+    "friendsofphp/php-cs-fixer": "^2.18",
+    "phpunit/phpunit": "^9.5",
+    "qossmic/deptrac-shim": "^0.12.0",
+    "squizlabs/php_codesniffer": "^3.5",
+    "vimeo/psalm": "^4.6"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "DL2\\": "src"
+    },
+    "files": []
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DL2\\Test\\": "tests"
+    }
+  },
+  "repositories": [],
+  "scripts": {
+    "post-install-cmd": [
+      "npm i --loglevel error"
+    ],
+    "post-update-cmd": [
+      "@post-install-cmd",
+      "npm rebuild"
+    ],
+    "deptrac": "deptrac -q --no-progress",
+    "format": [
+      "@~php-cs-fixer",
+      "@~phpcbf"
+    ],
+    "lint": [
+      "@deptrac",
+      "@~phpcs -snq -- public",
+      "@~phpcs -snq -- src",
+      "@~phpcs -snq -- tests",
+      "@psalm"
+    ],
+    "phpunit": "phpdbg -qrr -dzend.assertions=1 -dassert.exception=1 vendor/bin/phpunit",
+    "psalm": "psalm --no-cache --no-progress --output-format=compact",
+    "test": [
+      "@lint",
+      "@phpunit"
+    ],
+    "~php-cs-fixer": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix -v",
+    "~phpcbf": "phpcbf -sn",
+    "~phpcs": "phpcs"
+  }
+}

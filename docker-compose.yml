@@ -1,0 +1,48 @@
+version: "3"
+
+networks:
+  dl2-network:
+    name: dl2-network
+
+x-base: &x-base
+  environment:
+    - APP_ENV=$APPLICATION_ENV
+    - PHP_ENV=$APPLICATION_ENV
+    - DATABASE_DRIVER=$DATABASE_DRIVER
+    - DATABASE_DSN=$DATABASE_DSN
+    - DATABASE_HOST=$DATABASE_HOST
+    - DATABASE_NAME=$DATABASE_NAME
+    - DATABASE_PASSWORD=$DATABASE_PASSWORD
+    - DATABASE_PORT=$DATABASE_PORT
+    - DATABASE_USER=$DATABASE_USER
+  networks:
+    - dl2-network
+  restart: on-failure
+
+services:
+  nginx:
+    <<: *x-base
+    container_name: nginx
+    depends_on:
+      - php-fpm
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/usr/share/nginx/:ro
+      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+  php-fpm:
+    <<: *x-base
+    build:
+      context: ./.docker/php-fpm
+    container_name: php-fpm
+    volumes:
+      - ./:/usr/share/nginx/:ro
+      - ./.docker/php-fpm/php.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+
+  # redis:
+  #   <<: *x-base
+  #   container_name: redis
+  #   hostname: redis
+  #   image: redis:6

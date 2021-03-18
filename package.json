@@ -1,0 +1,26 @@
+{
+  "license": "Unlicense",
+  "devDependencies": {
+    "@commitlint/cli": "^12.0",
+    "@commitlint/config-conventional": "^12.0",
+    "@prettier/plugin-php": "^0.16",
+    "husky": "^5.1",
+    "lint-staged": "^10.5",
+    "prettier": "^2.1"
+  },
+  "lint-staged": {
+    "composer.json": [
+      "composer normalize"
+    ],
+    "*": [
+      "prettier --write"
+    ],
+    "*.php": [
+      "composer format",
+      "composer lint"
+    ]
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}
